@@ -1,1 +1,3 @@
-# My Awesome Greeter
+# Nobox
+
+## A javscript client for connecting to NOBOX
