@@ -22,9 +22,11 @@
     "type": "git",
     "url": "git+https://github.com/Akintunde102/nobox-js-client.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
+  "keywords": [
+    "Nobox"
+  ],
+  "author": "Akintunde Jegede",
   "bugs": {
     "url": "https://github.com/Akintunde102/nobox-js-client/issues"
   },
@@ -49,9 +51,4 @@
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0"
   },
-  "keywords": [
-    "Hello",
-    "Greeter"
-  ],
-  "author": "C-J",
 }
