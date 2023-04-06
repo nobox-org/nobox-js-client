@@ -11,7 +11,7 @@ export const call = async <T extends CObject>({
   callVerb,
   options,
   config,
-  token
+  token,
 }: CallCommands<T>) => {
   try {
     const connect = getConnectionInstance(config);
@@ -27,7 +27,7 @@ export const call = async <T extends CObject>({
 
     if (callVerb === CallVerb.Get) {
       res = await connect[callVerb](url, { params: _params, headers });
-      return res.data === "" ? null : res.data;
+      return res.data === '' ? null : res.data;
     }
 
     if (callVerb === CallVerb.Post) {

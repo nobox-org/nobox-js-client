@@ -11,7 +11,6 @@ export const _find = async <T extends CObject, P extends Partial<T>>(args: CallC
   }
 };
 
-
 export const _search = async <T extends CObject, P extends Partial<T>>(args: CallCommandsForSearch<T, P>) => {
   try {
     return await call({ ...args, ...callResourcesByType['_search'] });

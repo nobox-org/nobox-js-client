@@ -1,7 +1,10 @@
 import { _find, _findOne, _insert, _insertOne, _updateOne, _updateOneById, _getTokenOwner, _search } from './calls';
 import { CObject, Config, Options, ReturnObject, Space } from './types';
 
-export const getSchemaCreator = (config: Config) => <T extends CObject>(spaceModel: Space<T>) => createSchema(spaceModel, config);
+export const getSchemaCreator =
+  (config: Config) =>
+  <T extends CObject>(spaceModel: Space<T>) =>
+    createSchema(spaceModel, config);
 
 export type Model<T extends CObject> = ReturnType<typeof createSchema<T>>;
 
@@ -27,7 +30,7 @@ const createSchema = <T extends CObject>(spaceModel: Space<T>, config: Config) =
       searchableFields: (keyof T)[];
       searchText: string;
     },
-    options: Omit<Options<T>, "paramRelationship" | "populate"> = {}
+    options: Omit<Options<T>, 'paramRelationship' | 'populate'> = {},
   ): Promise<ReturnObject<T>> {
     return _search({
       params,
@@ -49,11 +52,15 @@ const createSchema = <T extends CObject>(spaceModel: Space<T>, config: Config) =
   ): Promise<ReturnObject<T>> {
     return _updateOne({ spaceModel, params, body, options, config });
   },
-  async updateOneById(id: string, body: Partial<T>, options?: Omit<Options<T>, 'pagination'>): Promise<ReturnObject<T>> {
+  async updateOneById(
+    id: string,
+    body: Partial<T>,
+    options?: Omit<Options<T>, 'pagination'>,
+  ): Promise<ReturnObject<T>> {
     const params = { id };
     return _updateOneById({ spaceModel, params, body, options, config });
   },
   async getTokenOwner(token: string): Promise<ReturnObject<T>> {
     return _getTokenOwner({ spaceModel, token, config });
-  }
+  },
 });
