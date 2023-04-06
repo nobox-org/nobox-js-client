@@ -11,6 +11,7 @@ export const call = async <T extends CObject>({
   callVerb,
   options,
   config,
+  token
 }: CallCommands<T>) => {
   try {
     const connect = getConnectionInstance(config);
@@ -18,13 +19,15 @@ export const call = async <T extends CObject>({
     const {
       headers,
       url,
-      body: _body,
-      params: _params,
-    } = prepareData({ spaceModel, params, body, slugAppend, options }, config);
+      body: _body = null,
+      params: _params = null,
+    } = prepareData({ spaceModel, params, body, slugAppend, options, token }, config);
+
     let res: AxiosResponse;
+
     if (callVerb === CallVerb.Get) {
       res = await connect[callVerb](url, { params: _params, headers });
-      return res.data;
+      return res.data === "" ? null : res.data;
     }
 
     if (callVerb === CallVerb.Post) {

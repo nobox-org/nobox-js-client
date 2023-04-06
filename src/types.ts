@@ -1,16 +1,20 @@
-export type StructureFieldType = 'TEXT' | 'NUMBER';
+export type StructureFieldType = typeof String | typeof Number | typeof Boolean | typeof Array;
 
 export type CObject = Record<string, any>;
 
-export interface StructureItem {
+export interface StructureItem<T = any, K = StructureFieldType> {
   description?: string;
+  comment?: string;
   required?: boolean;
-  type: StructureFieldType;
+  type: K;
   unique?: boolean;
   hashed?: boolean;
+  defaultValue?: T;
 }
 
-export type Structure<T> = Record<keyof T, StructureItem | StructureFieldType>;
+export type Structure<T> = {
+  [K in keyof T]: StructureItem<T[K]> | StructureFieldType;
+};
 
 export interface SpaceAuthOptions {
   active?: boolean;
@@ -30,6 +34,8 @@ export interface SpaceFunctionOptions<T> {
 export interface Space<T> {
   space: string;
   description: string;
+  initialData?: T[];
+  clear?: boolean;
   authOptions?: SpaceAuthOptions;
   structure: Structure<T>;
   functionOptions?: SpaceFunctionOptions<T>;
@@ -47,16 +53,18 @@ export enum CallVerb {
 export enum CallType {
   Find = '_find',
   FindOne = '_findOne',
+  Search = '_search',
   Insert = '_insert',
   InsertOne = '_insertOne',
   UpdateOne = '_updateOne',
   UpdateOneById = '_updateOneById',
+  GetTokenOwner = '_getTokenOwner',
 }
 
-export interface CallCommands<T> {
+export interface CallCommands<T extends CObject> {
   spaceModel: Space<T>;
 
-  params?: T | Partial<T> | { id: string };
+  params?: T | Partial<T> | { id: string } | { searchText: string; searchableFields: (keyof T)[] };
 
   body?: T | Partial<T> | (T | Partial<T>)[];
 
@@ -64,15 +72,21 @@ export interface CallCommands<T> {
 
   callVerb: CallVerb;
 
-  options?: Options<keyof T>;
+  options?: Options<T>;
 
+  config: Config;
+
+  token?: string;
+}
+
+export interface CallCommandsWithParams<T extends CObject, P> extends Omit<CallCommands<T>, 'params' | 'callVerb'> {
+  params: P;
+  options: Options<T>;
   config: Config;
 }
 
-export interface CallCommandsWithParams<T, P> extends Omit<CallCommands<T>, 'params' | 'callVerb'> {
-  params: P;
-  options: Options<keyof T>;
-  config: Config;
+export interface CallCommandsForSearch<T extends CObject, P> extends Omit<CallCommandsWithParams<T, P>, 'params'> {
+  params: { searchableFields: (keyof T)[]; searchText: string };
 }
 
 export interface CallCommandsWithBody<T extends object> extends Omit<CallCommands<T>, 'body'> {
@@ -84,7 +98,7 @@ interface CallResources {
   callVerb: CallVerb;
 }
 
-export type ReturnObject<T extends {}> = T & {
+export type ReturnObject<T extends CObject> = T & {
   id: string;
   updatedAt: string;
   createdAt: string;
@@ -93,15 +107,18 @@ export type ReturnObject<T extends {}> = T & {
 export type CallResourcesByType = Record<CallType, CallResources>;
 
 export interface SentHeaders {
-  'content-type': 'application/json';
+  //'content-type': 'application/json';
   authorization: `Bearer ${string}`;
   'auto-create-record-space': 'true' | 'false';
   'auto-create-project': 'true' | 'false';
+  mutate: 'true' | 'false';
+  'clear-all-spaces': 'true' | 'false';
   structure: string;
   options?: string;
+  token?: string;
 }
 
-export interface Options<T = string> {
+export interface Options<T extends CObject> {
   paramRelationship?: 'Or' | 'And';
   token?: string;
   pagination?: {
@@ -109,7 +126,7 @@ export interface Options<T = string> {
     page?: number;
   };
   sort?: {
-    by: T;
+    by: keyof ReturnObject<T>;
     order?: 'asc' | 'desc';
   };
   populate?: {
@@ -125,6 +142,8 @@ export interface Options<T = string> {
 export interface Config {
   endpoint: string;
   project: string;
-  autoCreate: 'true' | 'false';
+  autoCreate?: boolean;
+  mutate?: boolean;
   token: string;
+  clear?: boolean;
 }

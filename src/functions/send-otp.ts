@@ -1,4 +1,4 @@
-import { Logger } from '../logger';
+import { cLogger, Logger } from '../logger';
 import { getConnectionInstance } from '../resources';
 import { CallVerb, Config, Space } from '../types';
 import { extractErrorMessage, reMapSpaceStructureForCreation } from '../utils';
@@ -12,7 +12,7 @@ export interface SendOtpArgs<T> {
 }
 
 export interface SendOtpResponse {
-  success: true;
+  success: boolean;
 }
 
 /**
@@ -45,6 +45,9 @@ export const _sendOtp = async <T>(args: SendOtpArgs<T>): Promise<SendOtpResponse
     return res.data;
   } catch (error: any) {
     Logger.log(error, 'functions::sendOtp');
-    return extractErrorMessage(error);
+    const extractedErrorMessage = extractErrorMessage(error);
+    cLogger.log(extractedErrorMessage, 'functions::sendOtp');
   }
+
+  return { success: false };
 };

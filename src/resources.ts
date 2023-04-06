@@ -9,6 +9,10 @@ export const callResourcesByType: CallResourcesByType = {
     slugAppend: '_single_',
     callVerb: CallVerb.Get,
   },
+  _search: {
+    slugAppend: 'search',
+    callVerb: CallVerb.Get,
+  },
   _insert: {
     callVerb: CallVerb.Post,
   },
@@ -21,8 +25,12 @@ export const callResourcesByType: CallResourcesByType = {
     callVerb: CallVerb.Post,
   },
   _updateOneById: {
-    slugAppend: 'updateById',
+    slugAppend: 'update-by-id',
     callVerb: CallVerb.Post,
+  },
+  _getTokenOwner: {
+    slugAppend: 'get-token-owner',
+    callVerb: CallVerb.Get,
   },
 };
 
@@ -35,20 +43,22 @@ export const getConnectionInstance = (config: Config) => {
 
   const axiosInstance = axios.create({
     baseURL: autoGenUrl,
-    headers: { ...defaultRequestHeaders } as any,
+    headers: defaultRequestHeaders as any,
   });
 
   return axiosInstance;
 };
 
 export const getDefaultHeaders = (config: Config) => {
-  const { token, autoCreate: autoCreateProject } = config;
+  const { token, autoCreate: autoCreateProject = true, mutate = true, clear = false } = config;
 
   const defaultRequestHeaders: Omit<SentHeaders, 'structure'> = {
-    'content-type': 'application/json',
+    //  'content-type': 'application/json',
     authorization: `Bearer ${token}`,
     'auto-create-project': autoCreateProject ? 'true' : 'false',
     'auto-create-record-space': 'true',
+    mutate: mutate ? 'true' : 'false',
+    'clear-all-spaces': clear ? 'true' : 'false'
   };
 
   return defaultRequestHeaders;

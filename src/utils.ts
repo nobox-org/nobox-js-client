@@ -2,6 +2,7 @@ import { cLogger, Logger } from './logger';
 import { getDefaultHeaders } from './resources';
 import {
   CallCommands,
+  CObject,
   Config,
   SentHeaders,
   Space,
@@ -11,31 +12,59 @@ import {
   StructureItem,
 } from './types';
 
+export type CompatibleStructureFieldType = "TEXT" | "NUMBER" | "BOOLEAN" | "ARRAY";
+
 export interface CreateRecordSpacePayload<T> {
   name: string;
   description?: string;
   projectSlug: string;
   slug: string;
-  recordStructure: StructureItem[];
+  recordStructure: StructureItem<any, CompatibleStructureFieldType>[];
   authOptions?: SpaceAuthOptions;
   functionOptions?: SpaceFunctionOptions<T>;
+  clear?: boolean;
+  initialData?: T[];
+};
+
+export interface CreateHeaders<T> {
+  modelToCreate: CreateRecordSpacePayload<T>;
+  options?: any;
+  config: Config;
+  token?: string;
 }
 
-const extractStructureParams = (value: StructureItem | StructureFieldType): Required<StructureItem> => {
+const extraCompatibleTypeFromConstructorType = (type: StructureFieldType): CompatibleStructureFieldType => {
+  if (type === String) return 'TEXT';
+  if (type === Number) return 'NUMBER';
+  if (type === Boolean) return 'BOOLEAN';
+  if (type === Array) return 'ARRAY';
+  throw new Error(`Type ${type} is not supported`);
+}
+
+const extractStructureParams = (value: StructureItem | StructureFieldType): StructureItem<any, CompatibleStructureFieldType> => {
   const paramDefaults = {
     required: false,
     unique: false,
     description: '',
+    comment: '',
     hashed: false,
   };
 
   const isObject = (v: any): v is StructureItem => typeof value === 'object' && !Array.isArray(value) && value !== null;
 
-  return isObject(value) ? { ...paramDefaults, ...value } : { ...paramDefaults, type: value };
+  const valueIsAndObject = isObject(value);
+
+  const { type, ...rest } = valueIsAndObject ? value : { type: value };
+
+  return {
+    ...paramDefaults,
+    ...rest,
+    type: extraCompatibleTypeFromConstructorType(type)
+  };
 };
 
 export const reMapSpaceStructureForCreation = <T>(
-  { structure, space, description, authOptions, functionOptions }: Space<T>,
+  { structure, space, description, authOptions, functionOptions, clear, initialData }: Space<T>,
   config: Config,
 ): CreateRecordSpacePayload<T> => {
   const recordStructure = [];
@@ -46,7 +75,7 @@ export const reMapSpaceStructureForCreation = <T>(
     recordStructure.push({
       ...params,
       slug: camelToTrain(key),
-      name: camelToTrain(key),
+      name: key,
     });
   }
   return {
@@ -57,13 +86,12 @@ export const reMapSpaceStructureForCreation = <T>(
     authOptions,
     recordStructure,
     functionOptions,
+    clear,
+    initialData,
   };
 };
 
-export const camelToTrain = (key: string) => {
-  const result = key.replace(/([A-Z])/g, ' $1');
-  return key.trim().split(' ').join('-').toLowerCase();
-};
+export const camelToTrain = (str: string) => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 
 export const convertPayloadKeysToTrain = <T extends object>(payload: T) => {
   Logger.log({ payload }, 'convertParamsKeysToTrain');
@@ -78,8 +106,7 @@ export const convertPayloadKeysToTrain = <T extends object>(payload: T) => {
     const convertedPayload: Record<string, any> = {};
     const keys = Object.keys(payload);
     for (const key of keys) {
-      const keyInTrainFormat = camelToTrain(key);
-      convertedPayload[keyInTrainFormat] = payload[key as keyof T];
+      convertedPayload[key] = payload[key as keyof T];
     }
     return convertedPayload;
   }
@@ -91,39 +118,41 @@ export const handleSchemaCallErrors = (error: any, functionTag: string, publicEr
   return undefined;
 };
 
-const createPayload = ({ params, body, payload }: any) => {
-  return {
-    ...(params ? { params: convertPayloadKeysToTrain(payload) } : {}),
-    ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
-  } as Record<'params' | 'body', any>;
-};
-const createHeaders = ({ modelToCreate, options, config }: any): any => {
+const createPayload = ({ params, body }: any) => ({
+  ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
+  ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
+} as Record<'params' | 'body', any>);
+
+const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
   const headers: SentHeaders = {
     ...getDefaultHeaders(config),
     structure: JSON.stringify(modelToCreate),
   };
 
   if (options) headers['options'] = JSON.stringify(options) as any;
+  if (token) headers['token'] = token;
 
   return headers;
 };
 
-export const prepareData = <T>(
-  { spaceModel, params, body, slugAppend, options }: Omit<CallCommands<T>, 'callVerb' | 'config'>,
+export const prepareData = <T extends CObject>(
+  { spaceModel, params, body, slugAppend, options, token }: Omit<CallCommands<T>, 'callVerb' | 'config'>,
   config: Config,
 ) => {
   const modelToCreate = reMapSpaceStructureForCreation(spaceModel, config);
 
   const payload = params || body;
 
-  if (!payload) {
+  const gettingTokenOwnerOnly = Boolean(token);
+
+  if (!gettingTokenOwnerOnly && !payload) {
     const error = `Please Set body or params for this Call`;
     Logger.error({ structure: modelToCreate.name }, error);
     throw error;
   }
 
-  const payloadObject = createPayload({ params, body, payload });
-  const headers = createHeaders({ modelToCreate, options, config });
+  const payloadObject: Partial<ReturnType<typeof createPayload>> = gettingTokenOwnerOnly ? {} : createPayload({ params, body });
+  const headers = createHeaders({ modelToCreate, options, config, token });
 
   const fullPayload = {
     ...payloadObject,
@@ -143,6 +172,7 @@ export const handleCallErrors = (error: any, tag: string) => {
 };
 
 export const extractErrorMessage = (error: any) => {
+  console.log({ error });
   const errorMatchOne = error?.response?.data?.error?.response?.error;
   const errorMatchTwo = error?.response?.data?.error;
   const mappedError = errorMatchOne || errorMatchTwo;

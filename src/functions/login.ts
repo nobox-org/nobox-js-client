@@ -1,4 +1,4 @@
-import { Logger } from '../logger';
+import { cLogger, Logger } from '../logger';
 import { getConnectionInstance } from '../resources';
 import { CallVerb, Config, Space } from '../types';
 import { extractErrorMessage, reMapSpaceStructureForCreation } from '../utils';
@@ -9,8 +9,9 @@ export interface LoginArgs<T> {
   config: Config;
 }
 
-export interface LoginResponse {
+export interface LoginResponse<T> {
   token: string;
+  user: T;
 }
 
 /**
@@ -18,7 +19,7 @@ export interface LoginResponse {
  * @param args
  * @returns
  */
-export const _login = async <T>(args: LoginArgs<T>): Promise<LoginResponse> => {
+export const _login = async <T>(args: LoginArgs<T>): Promise<LoginResponse<T> | null> => {
   const { body, space, config } = args;
   const connect = getConnectionInstance(config);
 
@@ -35,6 +36,9 @@ export const _login = async <T>(args: LoginArgs<T>): Promise<LoginResponse> => {
     return res.data;
   } catch (error: any) {
     Logger.log(error, 'functions::login');
-    return extractErrorMessage(error);
+    const extractedErrorMessage = extractErrorMessage(error);
+    cLogger.log(extractedErrorMessage, 'functions::login');
   }
+
+  return null;
 };
