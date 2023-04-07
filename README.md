@@ -12,7 +12,7 @@
 import  {  Config,  getFunctions,  getSchemaCreator  }  from  "nobox-client";
 
 export const config: Config = {
-endpoint:  "https://nobox.cloud",
+endpoint:  "https://api.nobox.cloud",
 project:  "[project]",
 token: "[eternalToken]",
 };
