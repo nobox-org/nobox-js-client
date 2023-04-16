@@ -4,6 +4,9 @@
 - Click on Login With Github
 - Copy the Eternal Token on the dashboard
 
+### 2: Install Nobox Client
+`npm i nobox-client`
+
 ### 2: Add the Config File in your project
 - Create a `config.ts` file in your project as seen below
 
