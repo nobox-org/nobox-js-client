@@ -1,8 +1,7 @@
 # How to Use Nobox
 ### 1: Register An Account On Nobox Cloud
 - Go to https://nobox.cloud
-- Click on Login With Github
-- Copy the Eternal Token on the dashboard
+- Click on Login, and Copy the Token
 
 ### 2: Install Nobox Client
 `npm i nobox-client`
