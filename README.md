@@ -100,3 +100,7 @@ After following the steps above , your project folder structure should look like
 
 <img width="463" alt="Screenshot 2023-04-29 at 09 43 08" src="https://user-images.githubusercontent.com/17033759/235294073-e3f858a8-c430-41cc-9d66-fac94c426d35.png">
 
+You can check [this example project](https://github.com/nobox-org/nobox-react-example) to see how nobox should be setup 
+
+
+
