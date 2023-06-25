@@ -2,7 +2,7 @@
 
 ## Installation And Configuration
 
-- Install nobox-client in your project: `npm i nobox-client` --save
+- Install nobox-client in your project: `npm i nobox-client --save`
 - Go to https://nobox.cloud, register and copy the token
 - Create a folder and name it `nobox`
 - Create a `config.ts` file in the `nobox` folder you created and add the codes below
