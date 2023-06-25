@@ -4,9 +4,18 @@
     "declaration": true,
     "outDir": "./lib",
     "strict": true,
-    "target": "es2015",           
-    "lib": ["es6", "DOM"],   
+    "target": "es5",
+    "lib": [
+      "es6",
+      "dom",
+      "es2017"
+    ],
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ]
 }

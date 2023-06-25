@@ -1,3 +1,6 @@
+import { getKeyGroupSchemaCreator } from "./create-schema/create-key-group-schema";
+import { getRowedSchemaCreator } from "./create-schema/create-rowed-schema";
+
 export type StructureFieldType = typeof String | typeof Number | typeof Boolean | typeof Array;
 
 export type CObject = Record<string, any>;
@@ -59,7 +62,13 @@ export enum CallType {
   UpdateOne = '_updateOne',
   UpdateOneById = '_updateOneById',
   GetTokenOwner = '_getTokenOwner',
+  SetKeyValues = '_setKeyValues',
+  GetKeyValues = '_getKeyValues',
 }
+
+
+export type RowedSchemaCreator = ReturnType<typeof getRowedSchemaCreator>;
+export type KeyGroupSchemaCreator = ReturnType<typeof getKeyGroupSchemaCreator>;
 
 export interface CallCommands<T extends CObject> {
   spaceModel: Space<T>;
@@ -77,13 +86,32 @@ export interface CallCommands<T extends CObject> {
   config: Config;
 
   token?: string;
+
+  name?: string;
 }
+
+
+/**
+ * @description
+ * This is type for KeyGroup Calls
+ */
+export interface CallCommandsForSetKeyValues<T extends CObject, P> extends Omit<CallCommands<T>, 'body' | 'callVerb'> {
+  body: P;
+}
+
+export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T>, 'params' | 'callVerb'>
+
+/**
+ * @description
+ * This is type for rowed calls
+ */
 
 export interface CallCommandsWithParams<T extends CObject, P> extends Omit<CallCommands<T>, 'params' | 'callVerb'> {
   params: P;
   options: Options<T>;
   config: Config;
 }
+
 
 export interface CallCommandsForSearch<T extends CObject, P> extends Omit<CallCommandsWithParams<T, P>, 'params'> {
   params: { searchableFields: (keyof T)[]; searchText: string };
@@ -94,6 +122,7 @@ export interface CallCommandsWithBody<T extends object> extends Omit<CallCommand
 }
 
 interface CallResources {
+  name: string;
   slugAppend?: string;
   callVerb: CallVerb;
 }
