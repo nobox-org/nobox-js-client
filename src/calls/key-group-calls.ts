@@ -5,25 +5,30 @@ import { handleSchemaCallErrors } from '../utils';
 
 /**
  * This sets all the group keys in the key group at once
- * 
- * @param args 
- * @returns 
+ *
+ * @param args
+ * @returns
  */
 
-export const _setKeyValues = async <T extends CObject, P extends Partial<T>>(args: CallCommandsForSetKeyValues<T, P>) => {
+export const _setKeyValues = async <T extends CObject, P extends Partial<T>>(
+  args: CallCommandsForSetKeyValues<T, P>,
+) => {
   try {
     return await call({ ...args, ...callResourcesByType['_setKeyValues'] });
   } catch (error: any) {
-    return handleSchemaCallErrors(error, 'create-key-group-schema:_set, CallCommandsForGetKey, CallCommandsForGetKeys, CallCommandsForSetKey, CallCommandsForSetKeyValues', 'nobox_setKeyValues');
+    return handleSchemaCallErrors(
+      error,
+      'create-key-group-schema:_set, CallCommandsForGetKey, CallCommandsForGetKeys, CallCommandsForSetKey, CallCommandsForSetKeyValues',
+      'nobox_setKeyValues',
+    );
   }
 };
 
-
-/** 
+/**
  * This gets all the keys in the keygroup
- * 
- * @param args 
- * @returns 
+ *
+ * @param args
+ * @returns
  */
 export const _getKeyValues = async <T extends CObject>(args: CallCommandsForGetKeyValues<T>) => {
   try {
@@ -32,4 +37,3 @@ export const _getKeyValues = async <T extends CObject>(args: CallCommandsForGetK
     return handleSchemaCallErrors(error, 'create-key-group-schema:_getKeyValues', 'nobox_getKeyValues');
   }
 };
-

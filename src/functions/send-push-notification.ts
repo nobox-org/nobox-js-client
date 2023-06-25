@@ -31,7 +31,9 @@ export interface SendPushNotificationResponse {
  * @example {body: { title: "Greetings", body: "Good Morning"}, Space: "User"}
  */
 
-export const _sendPushNotification = async <T extends CObject>(args: SendPushNotificationArgs<T>): Promise<SendPushNotificationResponse> => {
+export const _sendPushNotification = async <T extends CObject>(
+  args: SendPushNotificationArgs<T>,
+): Promise<SendPushNotificationResponse> => {
   const { findBy, space, tokenField, config, body } = args;
 
   const spaceStructure = reMapSpaceStructureForCreation(space, config);
@@ -39,17 +41,21 @@ export const _sendPushNotification = async <T extends CObject>(args: SendPushNot
   const connect = getConnectionInstance(args.config);
 
   try {
-    const res = await connect[CallVerb.Post]('function/send-push-notification', {
-      findBy,
-      body
-    }, {
-      headers: {
-        'function-resources': JSON.stringify({
-          mustExistSpaceStructures: [spaceStructure],
-          receiverTokenField: tokenField,
-        }),
+    const res = await connect[CallVerb.Post](
+      'function/send-push-notification',
+      {
+        findBy,
+        body,
       },
-    });
+      {
+        headers: {
+          'function-resources': JSON.stringify({
+            mustExistSpaceStructures: [spaceStructure],
+            receiverTokenField: tokenField,
+          }),
+        },
+      },
+    );
     return res.data;
   } catch (error: any) {
     Logger.log(error, 'functions::sendPushNotification');
