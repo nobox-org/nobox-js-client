@@ -1,7 +1,19 @@
-import { _find, _findOne, _insert, _insertOne, _updateOne, _updateOneById, _getTokenOwner, _search } from '../calls/rowed-calls';
+import {
+  _find,
+  _findOne,
+  _insert,
+  _insertOne,
+  _updateOne,
+  _updateOneById,
+  _getTokenOwner,
+  _search,
+} from '../calls/rowed-calls';
 import { CObject, Config, Options, ReturnObject, Space } from '../types';
 
-export const getRowedSchemaCreator = (config: Config) => <T extends CObject>(spaceModel: Space<T>) => createRowedSchema(spaceModel, config);
+export const getRowedSchemaCreator =
+  (config: Config) =>
+  <T extends CObject>(spaceModel: Space<T>) =>
+    createRowedSchema(spaceModel, config);
 
 export type Model<T extends CObject> = ReturnType<typeof createRowedSchema<T>>;
 
@@ -27,7 +39,7 @@ const createRowedSchema = <T extends CObject>(spaceModel: Space<T>, config: Conf
       searchableFields: (keyof T)[];
       searchText: string;
     },
-    options: Omit<Options<T>, "paramRelationship" | "populate"> = {}
+    options: Omit<Options<T>, 'paramRelationship' | 'populate'> = {},
   ): Promise<ReturnObject<T>> {
     return _search({
       params,
@@ -49,11 +61,15 @@ const createRowedSchema = <T extends CObject>(spaceModel: Space<T>, config: Conf
   ): Promise<ReturnObject<T>> {
     return _updateOne({ spaceModel, params, body, options, config });
   },
-  async updateOneById(id: string, body: Partial<T>, options?: Omit<Options<T>, 'pagination'>): Promise<ReturnObject<T>> {
+  async updateOneById(
+    id: string,
+    body: Partial<T>,
+    options?: Omit<Options<T>, 'pagination'>,
+  ): Promise<ReturnObject<T>> {
     const params = { id };
     return _updateOneById({ spaceModel, params, body, options, config });
   },
   async getTokenOwner(token: string): Promise<ReturnObject<T>> {
     return _getTokenOwner({ spaceModel, token, config });
-  }
+  },
 });
