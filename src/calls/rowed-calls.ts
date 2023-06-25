@@ -1,7 +1,7 @@
 import { call } from './call';
-import { callResourcesByType } from './resources';
-import { CallCommandsForSearch, CallCommandsWithParams, CObject, Config, Options, Space } from './types';
-import { handleSchemaCallErrors } from './utils';
+import { callResourcesByType } from '../resources';
+import { CallCommandsForSearch, CallCommandsWithParams, CObject, Config, Options, Space } from '../types';
+import { handleSchemaCallErrors } from '../utils';
 
 export const _find = async <T extends CObject, P extends Partial<T>>(args: CallCommandsWithParams<T, P>) => {
   try {
