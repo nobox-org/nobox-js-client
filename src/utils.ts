@@ -13,7 +13,7 @@ import {
   StructureItem,
 } from './types';
 
-export type CompatibleStructureFieldType = "TEXT" | "NUMBER" | "BOOLEAN" | "ARRAY";
+export type CompatibleStructureFieldType = 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ARRAY';
 
 export interface CreateRecordSpacePayload<T> {
   name: string;
@@ -26,7 +26,7 @@ export interface CreateRecordSpacePayload<T> {
   webhooks?: SpaceWebhooks;
   clear?: boolean;
   initialData?: T[];
-};
+}
 
 export interface CreateHeaders<T> {
   modelToCreate: CreateRecordSpacePayload<T>;
@@ -41,9 +41,11 @@ const extraCompatibleTypeFromConstructorType = (type: StructureFieldType): Compa
   if (type === Boolean) return 'BOOLEAN';
   if (type === Array) return 'ARRAY';
   throw new Error(`Type ${type} is not supported`);
-}
+};
 
-const extractStructureParams = (value: StructureItem | StructureFieldType): StructureItem<any, CompatibleStructureFieldType> => {
+const extractStructureParams = (
+  value: StructureItem | StructureFieldType,
+): StructureItem<any, CompatibleStructureFieldType> => {
   const paramDefaults = {
     required: false,
     unique: false,
@@ -61,7 +63,7 @@ const extractStructureParams = (value: StructureItem | StructureFieldType): Stru
   return {
     ...paramDefaults,
     ...rest,
-    type: extraCompatibleTypeFromConstructorType(type)
+    type: extraCompatibleTypeFromConstructorType(type),
   };
 };
 
@@ -90,11 +92,11 @@ export const reMapSpaceStructureForCreation = <T>(
     functionOptions,
     clear,
     initialData,
-    webhooks
+    webhooks,
   };
 };
 
-export const camelToTrain = (str: string) => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+export const camelToTrain = (str: string) => str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 
 export const convertPayloadKeysToTrain = <T extends object>(payload: T) => {
   Logger.log({ payload }, 'convertParamsKeysToTrain');
@@ -121,13 +123,14 @@ export const handleSchemaCallErrors = (error: any, functionTag: string, publicEr
   return undefined;
 };
 
-const createPayload = ({ params, body }: any) => ({
-  ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
-  ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
-} as Record<'params' | 'body', any>);
+const createPayload = ({ params, body }: any) =>
+  ({
+    ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
+    ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
+  } as Record<'params' | 'body', any>);
 
 const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
-  console.log({ modelToCreate })
+  console.log({ modelToCreate });
   const headers: SentHeaders = {
     ...getDefaultHeaders(config),
     structure: JSON.stringify(modelToCreate),
@@ -140,7 +143,7 @@ const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeade
 };
 
 export const prepareData = <T extends CObject>(
-  { spaceModel, params, body, slugAppend = "", options, token }: Omit<CallCommands<T>, 'callVerb' | 'config'>,
+  { spaceModel, params, body, slugAppend = '', options, token }: Omit<CallCommands<T>, 'callVerb' | 'config'>,
   config: Config,
 ) => {
   const modelToCreate = reMapSpaceStructureForCreation(spaceModel, config);
@@ -149,13 +152,15 @@ export const prepareData = <T extends CObject>(
 
   const gettingTokenOwnerOnly = Boolean(token);
 
-  if (!["get-key-values", "get-token-owner"].includes(slugAppend) && !payload) {
+  if (!['get-key-values', 'get-token-owner'].includes(slugAppend) && !payload) {
     const error = `Please Set body or params for this Call`;
     Logger.error({ structure: modelToCreate.name }, error);
     throw error;
   }
 
-  const payloadObject: Partial<ReturnType<typeof createPayload>> = gettingTokenOwnerOnly ? {} : createPayload({ params, body });
+  const payloadObject: Partial<ReturnType<typeof createPayload>> = gettingTokenOwnerOnly
+    ? {}
+    : createPayload({ params, body });
   const headers = createHeaders({ modelToCreate, options, config, token });
 
   const fullPayload = {
