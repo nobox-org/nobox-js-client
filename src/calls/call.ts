@@ -22,13 +22,16 @@ export const call = async <T extends CObject>({
       url,
       body: _body = null,
       params: _params = null,
-    } = prepareData({ spaceModel, params, body, slugAppend, options, token }, config);
+    } = prepareData(
+      { spaceModel, params, body, slugAppend, options, token },
+      config,
+    );
 
     let res: AxiosResponse;
 
     if (callVerb === CallVerb.Get) {
       res = await connect[callVerb](url, { params: _params, headers });
-      return res.data === '' ? (name === 'find' ? [] : null) : res.data;
+      return res.data === '' ? name === "find" ? [] : null : res.data;
     }
 
     if (callVerb === CallVerb.Post) {
