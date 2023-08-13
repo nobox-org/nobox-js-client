@@ -76,7 +76,7 @@ export const getDefaultHeaders = (config: Config) => {
     'auto-create-project': autoCreateProject ? 'true' : 'false',
     'auto-create-record-space': 'true',
     mutate: mutate ? 'true' : 'false',
-    'clear-all-spaces': clear ? 'true' : 'false',
+    'clear-all-spaces': clear ? 'true' : 'false'
   };
 
   return defaultRequestHeaders;

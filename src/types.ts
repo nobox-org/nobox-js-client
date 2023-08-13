@@ -1,5 +1,5 @@
-import { getKeyGroupSchemaCreator } from './create-schema/create-key-group-schema';
-import { getRowedSchemaCreator } from './create-schema/create-rowed-schema';
+import { getKeyGroupSchemaCreator } from "./create-schema/create-key-group-schema";
+import { getRowedSchemaCreator } from "./create-schema/create-rowed-schema";
 
 export type StructureFieldType = typeof String | typeof Number | typeof Boolean | typeof Array;
 
@@ -34,9 +34,15 @@ export interface SpaceFunctionOptions<T> {
   login?: SpaceFunctionValues<T>;
 }
 
+export interface SpaceWebhooks {
+  onInsertUrl: string;
+  onUpdateUrl: string;
+};
+
 export interface Space<T> {
   space: string;
   description: string;
+  webhooks?: SpaceWebhooks;
   initialData?: T[];
   clear?: boolean;
   authOptions?: SpaceAuthOptions;
@@ -66,6 +72,7 @@ export enum CallType {
   GetKeyValues = '_getKeyValues',
 }
 
+
 export type RowedSchemaCreator = ReturnType<typeof getRowedSchemaCreator>;
 export type KeyGroupSchemaCreator = ReturnType<typeof getKeyGroupSchemaCreator>;
 
@@ -89,6 +96,7 @@ export interface CallCommands<T extends CObject> {
   name?: string;
 }
 
+
 /**
  * @description
  * This is type for KeyGroup Calls
@@ -97,7 +105,7 @@ export interface CallCommandsForSetKeyValues<T extends CObject, P> extends Omit<
   body: P;
 }
 
-export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T>, 'params' | 'callVerb'>;
+export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T>, 'params' | 'callVerb'>
 
 /**
  * @description
@@ -109,6 +117,7 @@ export interface CallCommandsWithParams<T extends CObject, P> extends Omit<CallC
   options: Options<T>;
   config: Config;
 }
+
 
 export interface CallCommandsForSearch<T extends CObject, P> extends Omit<CallCommandsWithParams<T, P>, 'params'> {
   params: { searchableFields: (keyof T)[]; searchText: string };
