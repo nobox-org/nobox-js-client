@@ -1,7 +1,7 @@
-import { AxiosResponse } from "axios";
-import { getConnectionInstance } from "../resources";
-import { CallCommands, CallVerb, CObject } from "../types";
-import { handleCallErrors, prepareData } from "../utils";
+import { AxiosResponse } from 'axios';
+import { getConnectionInstance } from '../resources';
+import { CallCommands, CallVerb, CObject } from '../types';
+import { handleCallErrors, prepareData } from '../utils';
 
 export const call = async <T extends CObject>({
   spaceModel,
@@ -28,7 +28,7 @@ export const call = async <T extends CObject>({
 
     if (callVerb === CallVerb.Get) {
       res = await connect[callVerb](url, { params: _params, headers });
-      return res.data === "" ? (name === "find" ? [] : null) : res.data;
+      return res.data === '' ? (name === 'find' ? [] : null) : res.data;
     }
 
     if (callVerb === CallVerb.Post) {
@@ -36,6 +36,6 @@ export const call = async <T extends CObject>({
       return res.data;
     }
   } catch (error: any) {
-    handleCallErrors(error, "createSchema:wrapCall");
+    handleCallErrors(error, 'createSchema:wrapCall');
   }
 };
