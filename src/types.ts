@@ -1,5 +1,5 @@
-import { getKeyGroupSchemaCreator } from "./create-schema/create-key-group-schema";
-import { getRowedSchemaCreator } from "./create-schema/create-rowed-schema";
+import { getKeyGroupSchemaCreator } from './create-schema/create-key-group-schema';
+import { getRowedSchemaCreator } from './create-schema/create-rowed-schema';
 
 export type StructureFieldType = typeof String | typeof Number | typeof Boolean | typeof Array;
 
@@ -13,7 +13,7 @@ export type StructureItem<T = any, K = StructureFieldType> = {
   unique?: boolean;
   hashed?: boolean;
   defaultValue?: T;
-}
+};
 
 export type Structure<T> = {
   [K in keyof T]: StructureItem<T[K]> | StructureFieldType;
@@ -22,22 +22,22 @@ export type Structure<T> = {
 export type SpaceAuthOptions = {
   active?: boolean;
   space: string;
-  scope?: ("find" | "insert" | "delete" | "update")[];
+  scope?: ('find' | 'insert' | 'delete' | 'update')[];
   token?: string;
-}
+};
 
 export type SpaceFunctionValues<T> = {
   compulsoryParams: Partial<keyof T>[];
-}
+};
 
 export type SpaceFunctionOptions<T> = {
   login?: SpaceFunctionValues<T>;
-}
+};
 
 export type SpaceWebhooks = {
   onInsertUrl: string;
   onUpdateUrl: string;
-}
+};
 
 export type Space<T> = {
   space: string;
@@ -48,28 +48,28 @@ export type Space<T> = {
   authOptions?: SpaceAuthOptions;
   structure: Structure<T>;
   functionOptions?: SpaceFunctionOptions<T>;
-}
+};
 
 export type Schema<T, P> = {
   find: (params: P) => T;
-}
+};
 
 export enum CallVerb {
-  Get = "get",
-  Post = "post",
+  Get = 'get',
+  Post = 'post',
 }
 
 export enum CallType {
-  Find = "_find",
-  FindOne = "_findOne",
-  Search = "_search",
-  Insert = "_insert",
-  InsertOne = "_insertOne",
-  UpdateOne = "_updateOne",
-  UpdateOneById = "_updateOneById",
-  GetTokenOwner = "_getTokenOwner",
-  SetKeyValues = "_setKeyValues",
-  GetKeyValues = "_getKeyValues",
+  Find = '_find',
+  FindOne = '_findOne',
+  Search = '_search',
+  Insert = '_insert',
+  InsertOne = '_insertOne',
+  UpdateOne = '_updateOne',
+  UpdateOneById = '_updateOneById',
+  GetTokenOwner = '_getTokenOwner',
+  SetKeyValues = '_setKeyValues',
+  GetKeyValues = '_getKeyValues',
 }
 
 export type RowedSchemaCreator = ReturnType<typeof getRowedSchemaCreator>;
@@ -93,7 +93,7 @@ export type CallCommands<T extends CObject> = {
   token?: string;
 
   name?: string;
-}
+};
 
 /**
  * @description
@@ -101,9 +101,9 @@ export type CallCommands<T extends CObject> = {
  */
 export type CallCommandsForSetKeyValues<T extends CObject, P> = {
   body: P;
-} & Omit<CallCommands<T>, "body" | "callVerb">
+} & Omit<CallCommands<T>, 'body' | 'callVerb'>;
 
-export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T>, "params" | "callVerb">;
+export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T>, 'params' | 'callVerb'>;
 
 /**
  * @description
@@ -114,21 +114,21 @@ export type CallCommandsWithParams<T extends CObject, P> = {
   params: P;
   options: Options<T>;
   config: Config;
-} & Omit<CallCommands<T>, "params" | "callVerb">
+} & Omit<CallCommands<T>, 'params' | 'callVerb'>;
 
 export type CallCommandsForSearch<T extends CObject, P> = {
   params: { searchableFields: (keyof T)[]; searchText: string };
-} & Omit<CallCommandsWithParams<T, P>, "params">
+} & Omit<CallCommandsWithParams<T, P>, 'params'>;
 
 export type CallCommandsWithBody<T extends object> = {
   body: T;
-} & Omit<CallCommands<T>, "body">
+} & Omit<CallCommands<T>, 'body'>;
 
 type CallResources = {
   name: string;
   slugAppend?: string;
   callVerb: CallVerb;
-}
+};
 
 export type ReturnObject<T extends CObject> = T & {
   id: string;
@@ -141,17 +141,17 @@ export type CallResourcesByType = Record<CallType, CallResources>;
 export type SentHeaders = {
   //'content-type': 'application/json';
   authorization: `Bearer ${string}`;
-  "auto-create-record-space": "true" | "false";
-  "auto-create-project": "true" | "false";
-  mutate: "true" | "false";
-  "clear-all-spaces": "true" | "false";
+  'auto-create-record-space': 'true' | 'false';
+  'auto-create-project': 'true' | 'false';
+  mutate: 'true' | 'false';
+  'clear-all-spaces': 'true' | 'false';
   structure: string;
   options?: string;
   token?: string;
-}
+};
 
 export type Options<T extends CObject> = {
-  paramRelationship?: "Or" | "And";
+  paramRelationship?: 'Or' | 'And';
   token?: string;
   pagination?: {
     limit: number;
@@ -159,7 +159,7 @@ export type Options<T extends CObject> = {
   };
   sort?: {
     by: keyof ReturnObject<T>;
-    order?: "asc" | "desc";
+    order?: 'asc' | 'desc';
   };
   populate?: {
     fields: {
@@ -169,7 +169,7 @@ export type Options<T extends CObject> = {
     };
     space: string;
   }[];
-}
+};
 
 export type Config = {
   endpoint: string;
@@ -178,4 +178,4 @@ export type Config = {
   mutate?: boolean;
   token: string;
   clear?: boolean;
-}
+};
