@@ -15,7 +15,7 @@ import {
 
 export type CompatibleStructureFieldType = 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ARRAY';
 
-export type CreateRecordSpacePayload<T> = {
+export interface CreateRecordSpacePayload<T> {
   name: string;
   description?: string;
   projectSlug: string;
@@ -26,14 +26,14 @@ export type CreateRecordSpacePayload<T> = {
   webhooks?: SpaceWebhooks;
   clear?: boolean;
   initialData?: T[];
-};
+}
 
-export type CreateHeaders<T> = {
+export interface CreateHeaders<T> {
   modelToCreate: CreateRecordSpacePayload<T>;
   options?: any;
   config: Config;
   token?: string;
-};
+}
 
 const extraCompatibleTypeFromConstructorType = (type: StructureFieldType): CompatibleStructureFieldType => {
   if (type === String) return 'TEXT';
@@ -130,7 +130,6 @@ const createPayload = ({ params, body }: any) =>
   } as Record<'params' | 'body', any>);
 
 const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
-  console.log({ modelToCreate });
   const headers: SentHeaders = {
     ...getDefaultHeaders(config),
     structure: JSON.stringify(modelToCreate),
@@ -153,7 +152,7 @@ export const prepareData = <T extends CObject>(
   const gettingTokenOwnerOnly = Boolean(token);
 
   if (!['get-key-values', 'get-token-owner'].includes(slugAppend) && !payload) {
-    const error = 'Please Set body or params for this Call';
+    const error = `Please Set body or params for this Call`;
     Logger.error({ structure: modelToCreate.name }, error);
     throw error;
   }
@@ -181,7 +180,6 @@ export const handleCallErrors = (error: any, tag: string) => {
 };
 
 export const extractErrorMessage = (error: any) => {
-  console.log({ error });
   const errorMatchOne = error?.response?.data?.error?.response?.error;
   const errorMatchTwo = error?.response?.data?.error;
   const mappedError = errorMatchOne || errorMatchTwo;
