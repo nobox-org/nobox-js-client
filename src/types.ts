@@ -5,7 +5,7 @@ export type StructureFieldType = typeof String | typeof Number | typeof Boolean 
 
 export type CObject = Record<string, any>;
 
-export type StructureItem<T = any, K = StructureFieldType> = {
+export interface StructureItem<T = any, K = StructureFieldType> {
   description?: string;
   comment?: string;
   required?: boolean;
@@ -13,33 +13,33 @@ export type StructureItem<T = any, K = StructureFieldType> = {
   unique?: boolean;
   hashed?: boolean;
   defaultValue?: T;
-};
+}
 
 export type Structure<T> = {
   [K in keyof T]: StructureItem<T[K]> | StructureFieldType;
 };
 
-export type SpaceAuthOptions = {
+export interface SpaceAuthOptions {
   active?: boolean;
   space: string;
   scope?: ('find' | 'insert' | 'delete' | 'update')[];
   token?: string;
-};
+}
 
-export type SpaceFunctionValues<T> = {
+export interface SpaceFunctionValues<T> {
   compulsoryParams: Partial<keyof T>[];
-};
+}
 
-export type SpaceFunctionOptions<T> = {
+export interface SpaceFunctionOptions<T> {
   login?: SpaceFunctionValues<T>;
-};
+}
 
-export type SpaceWebhooks = {
+export interface SpaceWebhooks {
   onInsertUrl: string;
   onUpdateUrl: string;
-};
+}
 
-export type Space<T> = {
+export interface Space<T> {
   space: string;
   description: string;
   webhooks?: SpaceWebhooks;
@@ -48,11 +48,11 @@ export type Space<T> = {
   authOptions?: SpaceAuthOptions;
   structure: Structure<T>;
   functionOptions?: SpaceFunctionOptions<T>;
-};
+}
 
-export type Schema<T, P> = {
+export interface Schema<T, P> {
   find: (params: P) => T;
-};
+}
 
 export enum CallVerb {
   Get = 'get',
@@ -75,7 +75,7 @@ export enum CallType {
 export type RowedSchemaCreator = ReturnType<typeof getRowedSchemaCreator>;
 export type KeyGroupSchemaCreator = ReturnType<typeof getKeyGroupSchemaCreator>;
 
-export type CallCommands<T extends CObject> = {
+export interface CallCommands<T extends CObject> {
   spaceModel: Space<T>;
 
   params?: T | Partial<T> | { id: string } | { searchText: string; searchableFields: (keyof T)[] };
@@ -93,15 +93,15 @@ export type CallCommands<T extends CObject> = {
   token?: string;
 
   name?: string;
-};
+}
 
 /**
  * @description
  * This is type for KeyGroup Calls
  */
-export type CallCommandsForSetKeyValues<T extends CObject, P> = {
+export interface CallCommandsForSetKeyValues<T extends CObject, P> extends Omit<CallCommands<T>, 'body' | 'callVerb'> {
   body: P;
-} & Omit<CallCommands<T>, 'body' | 'callVerb'>;
+}
 
 export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T>, 'params' | 'callVerb'>;
 
@@ -110,25 +110,25 @@ export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T
  * This is type for rowed calls
  */
 
-export type CallCommandsWithParams<T extends CObject, P> = {
+export interface CallCommandsWithParams<T extends CObject, P> extends Omit<CallCommands<T>, 'params' | 'callVerb'> {
   params: P;
   options: Options<T>;
   config: Config;
-} & Omit<CallCommands<T>, 'params' | 'callVerb'>;
+}
 
-export type CallCommandsForSearch<T extends CObject, P> = {
+export interface CallCommandsForSearch<T extends CObject, P> extends Omit<CallCommandsWithParams<T, P>, 'params'> {
   params: { searchableFields: (keyof T)[]; searchText: string };
-} & Omit<CallCommandsWithParams<T, P>, 'params'>;
+}
 
-export type CallCommandsWithBody<T extends object> = {
+export interface CallCommandsWithBody<T extends object> extends Omit<CallCommands<T>, 'body'> {
   body: T;
-} & Omit<CallCommands<T>, 'body'>;
+}
 
-type CallResources = {
+interface CallResources {
   name: string;
   slugAppend?: string;
   callVerb: CallVerb;
-};
+}
 
 export type ReturnObject<T extends CObject> = T & {
   id: string;
@@ -138,7 +138,7 @@ export type ReturnObject<T extends CObject> = T & {
 
 export type CallResourcesByType = Record<CallType, CallResources>;
 
-export type SentHeaders = {
+export interface SentHeaders {
   //'content-type': 'application/json';
   authorization: `Bearer ${string}`;
   'auto-create-record-space': 'true' | 'false';
@@ -148,9 +148,9 @@ export type SentHeaders = {
   structure: string;
   options?: string;
   token?: string;
-};
+}
 
-export type Options<T extends CObject> = {
+export interface Options<T extends CObject> {
   paramRelationship?: 'Or' | 'And';
   token?: string;
   pagination?: {
@@ -169,13 +169,13 @@ export type Options<T extends CObject> = {
     };
     space: string;
   }[];
-};
+}
 
-export type Config = {
+export interface Config {
   endpoint: string;
   project: string;
   autoCreate?: boolean;
   mutate?: boolean;
   token: string;
   clear?: boolean;
-};
+}
