@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import { getConnectionInstance } from '../resources';
 import { CallCommands, CallVerb, CObject } from '../types';
 import { handleCallErrors, prepareData } from '../utils';
+import { Logger } from '../logger';
 
 export const call = async <T extends CObject>({
   spaceModel,
@@ -36,6 +37,7 @@ export const call = async <T extends CObject>({
       return res.data;
     }
   } catch (error: any) {
+    Logger.log(error, 'createSchema:wrapCall');
     handleCallErrors(error, 'createSchema:wrapCall');
   }
 };
