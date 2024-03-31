@@ -1,7 +1,7 @@
 {
   "name": "nobox-client",
   "version": "1.12.1",
-  "description": "A Javascript client for the Nobox API",
+  "description": "A Javascript client for the Nobox.cloud Backend As A Service",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
