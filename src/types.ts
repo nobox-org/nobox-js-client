@@ -1,7 +1,7 @@
 import { getKeyGroupSchemaCreator } from './create-schema/create-key-group-schema';
 import { getRowedSchemaCreator } from './create-schema/create-rowed-schema';
 
-export type StructureFieldType = typeof String | typeof Number | typeof Boolean | typeof Array;
+export type StructureFieldType = typeof String | typeof Number | typeof Boolean | typeof Array | typeof Object;
 
 export type CObject = Record<string, any>;
 
