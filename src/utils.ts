@@ -13,7 +13,7 @@ import {
   StructureItem,
 } from './types';
 
-export type CompatibleStructureFieldType = 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ARRAY';
+export type CompatibleStructureFieldType = 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ARRAY' | 'OBJECT';
 
 export interface CreateRecordSpacePayload<T> {
   name: string;
@@ -40,6 +40,7 @@ const extraCompatibleTypeFromConstructorType = (type: StructureFieldType): Compa
   if (type === Number) return 'NUMBER';
   if (type === Boolean) return 'BOOLEAN';
   if (type === Array) return 'ARRAY';
+  if (type === Object) return 'OBJECT';
   throw new Error(`Type ${type} is not supported`);
 };
 
@@ -124,10 +125,10 @@ export const handleSchemaCallErrors = (error: any, functionTag: string, publicEr
 };
 
 const createPayload = ({ params, body }: any) =>
-  ({
-    ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
-    ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
-  } as Record<'params' | 'body', any>);
+({
+  ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
+  ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
+} as Record<'params' | 'body', any>);
 
 const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
   const headers: SentHeaders = {
