@@ -13,8 +13,8 @@ import { CObject, Config, Options, ReturnObject, Space } from '../types';
 
 export const getRowedSchemaCreator =
   (config: Config) =>
-    <T extends CObject>(spaceModel: Space<T>) =>
-      createRowedSchema(spaceModel, config);
+  <T extends CObject>(spaceModel: Space<T>) =>
+    createRowedSchema(spaceModel, config);
 
 export type RowedSchemaModel<T extends CObject> = ReturnType<typeof createRowedSchema<T>>;
 
@@ -70,9 +70,7 @@ const createRowedSchema = <T extends CObject>(spaceModel: Space<T>, config: Conf
     const params = { id };
     return _updateOneById({ spaceModel, params, body, options, config });
   },
-  async deleteOneById(
-    id: string,
-  ): Promise<ReturnObject<T>> {
+  async deleteOneById(id: string): Promise<ReturnObject<T>> {
     const params = { id };
     return _deleteOneById({ spaceModel, params, config });
   },
