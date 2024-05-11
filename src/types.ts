@@ -57,6 +57,7 @@ export interface Schema<T, P> {
 export enum CallVerb {
   Get = 'get',
   Post = 'post',
+  Delete = 'delete',
 }
 
 export enum CallType {
@@ -67,6 +68,7 @@ export enum CallType {
   InsertOne = '_insertOne',
   UpdateOne = '_updateOne',
   UpdateOneById = '_updateOneById',
+  DeleteOneById = '_deleteOneById',
   GetTokenOwner = '_getTokenOwner',
   SetKeyValues = '_setKeyValues',
   GetKeyValues = '_getKeyValues',

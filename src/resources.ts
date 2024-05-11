@@ -35,6 +35,10 @@ export const callResourcesByType: CallResourcesByType = {
     slugAppend: 'update-by-id',
     callVerb: CallVerb.Post,
   },
+  _deleteOneById: {
+    name: 'deleteOneById',
+    callVerb: CallVerb.Delete,
+  },
   _getTokenOwner: {
     name: 'getTokenOwner',
     slugAppend: 'get-token-owner',

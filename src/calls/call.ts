@@ -36,6 +36,14 @@ export const call = async <T extends CObject>({
       res = await connect[callVerb](url, _body, { params: _params, headers });
       return res.data;
     }
+
+    if (callVerb === CallVerb.Delete) {
+      res = await connect[callVerb](url, {
+        params: _params,
+        headers
+      });
+      return res.data;
+    }
   } catch (error: any) {
     Logger.log(error, 'createSchema:wrapCall');
     handleCallErrors(error, 'createSchema:wrapCall');
