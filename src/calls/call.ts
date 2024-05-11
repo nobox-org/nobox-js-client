@@ -40,7 +40,7 @@ export const call = async <T extends CObject>({
     if (callVerb === CallVerb.Delete) {
       res = await connect[callVerb](url, {
         params: _params,
-        headers
+        headers,
       });
       return res.data;
     }

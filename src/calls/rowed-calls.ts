@@ -81,7 +81,6 @@ export const _updateOne = async <T extends CObject, P extends Partial<T>>(args: 
   }
 };
 
-
 export const _deleteOneById = async <T extends CObject, P extends Partial<T>>(args: {
   spaceModel: Space<T>;
   params: { id: string };
@@ -93,7 +92,6 @@ export const _deleteOneById = async <T extends CObject, P extends Partial<T>>(ar
     return handleSchemaCallErrors(error, 'create-schema:_deleteOneById', 'nobox:_deleteOneById');
   }
 };
-
 
 export const _getTokenOwner = async <T extends CObject>(args: {
   spaceModel: Space<T>;
