@@ -15,7 +15,7 @@ export const _search = async <T extends CObject, P extends Partial<T>>(args: Cal
   try {
     return await call({ ...args, ...callResourcesByType['_search'] });
   } catch (error: any) {
-    return handleSchemaCallErrors(error, 'create-schema:_find', 'nobox_find');
+    return handleSchemaCallErrors(error, 'create-schema:_search', 'nobox_find');
   }
 };
 
@@ -49,7 +49,7 @@ export const _insertOne = async <T extends CObject>(args: {
   try {
     return await call({ ...args, ...callResourcesByType['_insertOne'] });
   } catch (error: any) {
-    return handleSchemaCallErrors(error, 'create-schema:_insert', 'nobox:_insertOne');
+    return handleSchemaCallErrors(error, 'create-schema:_insertOne', 'nobox:_insertOne');
   }
 };
 
@@ -63,7 +63,7 @@ export const _updateOneById = async <T extends CObject, P extends Partial<T>>(ar
   try {
     return await call({ ...args, ...callResourcesByType['_updateOneById'] });
   } catch (error: any) {
-    return handleSchemaCallErrors(error, 'create-schema:_insert', 'nobox:_updateOneById');
+    return handleSchemaCallErrors(error, 'create-schema:_updateOneById', 'nobox:_updateOneById');
   }
 };
 
@@ -77,9 +77,23 @@ export const _updateOne = async <T extends CObject, P extends Partial<T>>(args: 
   try {
     return await call({ ...args, ...callResourcesByType['_updateOne'] });
   } catch (error: any) {
-    return handleSchemaCallErrors(error, 'create-schema:_insert', 'nobox:_updateOne');
+    return handleSchemaCallErrors(error, 'create-schema:_updateOne', 'nobox:_updateOne');
   }
 };
+
+
+export const _deleteOneById = async <T extends CObject, P extends Partial<T>>(args: {
+  spaceModel: Space<T>;
+  params: { id: string };
+  config: Config;
+}) => {
+  try {
+    return await call({ ...args, ...callResourcesByType['_deleteOneById'] });
+  } catch (error: any) {
+    return handleSchemaCallErrors(error, 'create-schema:_deleteOneById', 'nobox:_deleteOneById');
+  }
+};
+
 
 export const _getTokenOwner = async <T extends CObject>(args: {
   spaceModel: Space<T>;
