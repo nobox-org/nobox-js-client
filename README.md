@@ -11,11 +11,15 @@
 import  {  Config,  getFunctions,  getSchemaCreator  }  from  "nobox-client";
 
 export const config: Config = {
-endpoint:  "https://api.nobox.cloud",
-project:  "[yourproject]",
-token: "[yourToken]",
+endpoint:  "https://api.nobox.cloud", // or http://localhost:8000 if you are running local
+project:  "[yourproject]", //Replace [yourProject] with your desired project name
+token: "[yourToken]", //Replace [yourtoken] with the token you copied in step 2
 };
-export  const  createSchema  =  getSchemaCreator(config);
+
+export const createRowSchema = getSchemaCreator(config, { type: "rowed" });
+
+export const createKeyGroupSchema = getSchemaCreator(config, { type: "key-group" });
+
 export  const  Nobox  =  getFunctions(config);
 ```
 
@@ -27,7 +31,7 @@ export  const  Nobox  =  getFunctions(config);
 
 ```ts
 import { Space } from "nobox-client";
-import { createSchema } from "../config";
+import { createRowSchema } from "../config";
 
 interface User {
     email: string;
@@ -57,14 +61,15 @@ export const UserStructure: Space<User> = {
             type: String,
         },
         age: {
-            description: "User's Street Number",
+            description: "User's Age",
             required: false,
             type: Number,
         }
     }
 }
 
-export const UserModel = createSchema<User>(UserStructure);
+export const UserModel = createRowSchema<User>(UserStructure);
+
 ```
 
 After following the steps above , your project folder structure should look like this:
