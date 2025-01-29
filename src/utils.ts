@@ -121,7 +121,10 @@ export const convertPayloadKeysToTrain = <T extends object>(payload: T) => {
 
 export const handleSchemaCallErrors = (error: any, functionTag: string, publicErrorTag: string) => {
   Logger.log(error, functionTag);
-  cLogger.log({ error: error || "An Error Occurred" }, publicErrorTag);
+  const _error = { error: error || "An Error Occurred", tag: publicErrorTag};
+  cLogger.debug(_error, publicErrorTag);
+
+  // throw _error;
   return undefined;
 };
 
@@ -183,11 +186,12 @@ export const handleCallErrors = (error: any, tag: string) => {
 
 export const extractErrorMessage = (error: any) => {
   const errorMatchOne = error?.response?.data?.error?.response?.error;
-  const errorMatchTwo = error?.response?.data?.error;
+  const errorMatchTwo = error?.response?.data;
   const mappedError = errorMatchOne || errorMatchTwo;
   if (!mappedError) {
     console.log(error.message, "extractErrorMessage");
     return "Connection Error";
   }
+
   return mappedError;
 };

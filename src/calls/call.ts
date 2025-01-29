@@ -29,7 +29,7 @@ export const call = async <T extends CObject>({
     let res: AxiosResponse;
 
     if (callVerb === CallVerb.Get) {
-      res = await connect[callVerb](url, { params: _params, headers });
+      res = await connect.get(url, { params: _params, headers });
       return res.data === "" ? (name === "find" ? [] : null) : res.data;
     }
 
@@ -46,7 +46,10 @@ export const call = async <T extends CObject>({
       return res.data;
     }
   } catch (error: any) {
+    // console.error(error, "createSchema:wrapCall");
+    // throw error;
     Logger.log(error, "createSchema:wrapCall");
-    handleCallErrors(error, "createSchema:wrapCall");
+
+    handleCallErrors(error, "createSchema:wrapCall")
   }
 };

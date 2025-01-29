@@ -8,7 +8,9 @@ export const _find = async <T extends CObject, P extends Partial<T>>(args: CallC
   try {
     return await call({ ...args, ...callResourcesByType["_find"] });
   } catch (error: any) {
+    console.error("Error:", error);
     return handleSchemaCallErrors(error, "create-schema:_find", "nobox_find");
+    // throw error
   }
 };
 
