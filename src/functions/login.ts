@@ -1,7 +1,8 @@
-import { cLogger, Logger } from '../logger';
-import { getConnectionInstance } from '../resources';
-import { CallVerb, Config, Space } from '../types';
-import { extractErrorMessage, reMapSpaceStructureForCreation } from '../utils';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { cLogger, Logger } from "../logger";
+import { getConnectionInstance } from "../resources";
+import { CallVerb, Config, Space } from "../types";
+import { extractErrorMessage, reMapSpaceStructureForCreation } from "../utils";
 
 export type LoginArgs<T> = {
   body: Partial<T>;
@@ -26,18 +27,18 @@ export const _login = async <T>(args: LoginArgs<T>): Promise<LoginResponse<T> | 
   const spaceStructure = reMapSpaceStructureForCreation(space, config);
 
   try {
-    const res = await connect[CallVerb.Post]('function/login', body, {
+    const res = await connect[CallVerb.Post]("function/login", body, {
       headers: {
-        'function-resources': JSON.stringify({
+        "function-resources": JSON.stringify({
           mustExistSpaceStructures: [spaceStructure],
         }),
       },
     });
     return res.data;
   } catch (error: any) {
-    Logger.log(error, 'functions::login');
+    Logger.log(error, "functions::login");
     const extractedErrorMessage = extractErrorMessage(error);
-    cLogger.log(extractedErrorMessage, 'functions::login');
+    cLogger.log(extractedErrorMessage, "functions::login");
   }
 
   return null;

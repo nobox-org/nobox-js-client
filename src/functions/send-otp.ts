@@ -1,7 +1,8 @@
-import { cLogger, Logger } from '../logger';
-import { getConnectionInstance } from '../resources';
-import { CallVerb, Config, Space } from '../types';
-import { extractErrorMessage, reMapSpaceStructureForCreation } from '../utils';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { cLogger, Logger } from "../logger";
+import { getConnectionInstance } from "../resources";
+import { CallVerb, Config, Space } from "../types";
+import { extractErrorMessage, reMapSpaceStructureForCreation } from "../utils";
 
 export type SendOtpArgs<T> = {
   body: Partial<T>;
@@ -33,9 +34,9 @@ export const _sendOtp = async <T>(args: SendOtpArgs<T>): Promise<SendOtpResponse
 
   const connect = getConnectionInstance(args.config);
   try {
-    const res = await connect[CallVerb.Post]('function/send-otp', body, {
+    const res = await connect[CallVerb.Post]("function/send-otp", body, {
       headers: {
-        'function-resources': JSON.stringify({
+        "function-resources": JSON.stringify({
           mustExistSpaceStructures: [spaceStructure],
           receiverEmailField: emailField,
           receiverHiNameField: hiNameField,
@@ -44,9 +45,9 @@ export const _sendOtp = async <T>(args: SendOtpArgs<T>): Promise<SendOtpResponse
     });
     return res.data;
   } catch (error: any) {
-    Logger.log(error, 'functions::sendOtp');
+    Logger.log(error, "functions::sendOtp");
     const extractedErrorMessage = extractErrorMessage(error);
-    cLogger.log(extractedErrorMessage, 'functions::sendOtp');
+    cLogger.log(extractedErrorMessage, "functions::sendOtp");
   }
 
   return { success: false };
