@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cLogger, Logger } from "./logger";
+import { Logger } from "./logger";
 import { getDefaultHeaders } from "./resources";
 import {
   CallCommands,
@@ -121,11 +121,19 @@ export const convertPayloadKeysToTrain = <T extends object>(payload: T) => {
 
 export const handleSchemaCallErrors = (error: any, functionTag: string, publicErrorTag: string) => {
   Logger.log(error, functionTag);
-  const _error = { error: error || "An Error Occurred", tag: publicErrorTag};
-  cLogger.debug(_error, publicErrorTag);
+  // const _error = { ...error, tag: publicErrorTag};
+  const _error = new CallError(
+    "Error in Call",
+    error.statusCode,
+    error.message,
+    error.path,
+    error.timestamp,
+    publicErrorTag
+  )
+  // cLogger.debug(_error, publicErrorTag);
 
-  // throw _error;
-  return undefined;
+  throw _error;
+  // return undefined;
 };
 
 const createPayload = ({ params, body }: any) =>
@@ -195,3 +203,24 @@ export const extractErrorMessage = (error: any) => {
 
   return mappedError;
 };
+
+
+export class CallError extends Error {
+  statusCode: number;
+  details?: string;
+  path?: string;
+  timestamp?: string;
+  tag?: string;
+
+  constructor(message ="Error Occurred", statusCode: number, details?: string, path?: string, timestamp?: string, tag?: string) {
+    super(message);
+    this.name = "CallError";
+    this.statusCode = statusCode;
+    this.details = details;
+    this.path = path;
+    this.timestamp = timestamp;
+    this.tag = tag;
+
+    Object.setPrototypeOf(this, new.target.prototype); // Ensures correct prototype chain
+  }
+}

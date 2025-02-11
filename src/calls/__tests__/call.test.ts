@@ -2,11 +2,13 @@
 import { Config, Space } from "../../types";
 import { getConnectionInstance } from "../../resources";
 import { _find, _insertOne } from "../rowed-calls";
+import { CallError } from "../../utils";
+// import { Logger } from "../../logger";
 
 export const mockConfig: Config = {
-  endpoint: "https://api.nobox.cloud",
-  project: "nobox-test",
-  token: "b4hgbdmjpma_galnmur_jiddmm4dnmpymo43aigb",
+  endpoint: process.env.NOBOX_API || "https://api.nobox.cloud",
+  project: process.env.NOBOX_PROJECT || "",
+  token: process.env.NOBOX_TOKEN || "",
 };
 
 type Todo = {
@@ -44,7 +46,7 @@ beforeEach(() => {
     };
 });
 
-describe("Axios functions", () => {
+describe("Async Calls", () => {
     
 
     describe("getConnectionInstance", () => {
@@ -84,14 +86,29 @@ describe("Axios functions", () => {
             expect(result).toBeDefined();
         });
 
-        it("should not make an insert of bad item into project", async () => {
+        it("should throw error on insert of bad item into project", async () => {
+
+          await expect(
+            _insertOne({
+              ...args,
+              body: bad_data
+            })
+          ).rejects.toThrow();
+        });
+        it("should throw error on insert of bad item into project, error type must be CallError", async () => {
+
+          try {
 
             const result = await _insertOne({
-                  ...args,
-                  body: bad_data
-              })
-
-            expect(result).toBeUndefined();
+              ...args,
+              body: bad_data
+            })
+            console.error(result);
+            fail("Bad input didn't cause error!");
+          } catch (err){
+            expect(err).toBeInstanceOf(CallError);
+            expect((err as any).statusCode).toBe(400);
+          }
         });
     });
 });
