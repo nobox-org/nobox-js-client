@@ -3,9 +3,10 @@
 ## Installation And Configuration
 
 - Install nobox-client in your project: `npm i nobox-client --save`
-- Go to https://nobox.cloud, register and copy the token
+- Go to <https://nobox.cloud>, register and copy the token
 - Create a folder and name it `nobox`
 - Create a `config.ts` file in the `nobox` folder you created and add the codes below
+
 ```ts
 import  {  Config,  getFunctions,  getSchemaCreator  }  from  "nobox-client";
 
@@ -17,6 +18,7 @@ token: "[yourToken]",
 export  const  createSchema  =  getSchemaCreator(config);
 export  const  Nobox  =  getFunctions(config);
 ```
+
 - Replace `[yourProject]` with your desired project name
 - Replace `[yourtoken]` with the token you copied on nobox.cloud website
 - Create a folder called `record-structures` (could be any other name) inside the `nobox` folder too
@@ -69,10 +71,10 @@ After following the steps above , your project folder structure should look like
 
 <img width="463" alt="Screenshot 2023-04-29 at 09 43 08" src="https://user-images.githubusercontent.com/17033759/235294073-e3f858a8-c430-41cc-9d66-fac94c426d35.png">
 
-You can check [this example project](https://github.com/nobox-org/nobox-react-example) for further context 
-
+You can check [this example project](https://github.com/nobox-org/nobox-react-example) for further context
 
 ## Usage
+
 Nobox-js-client acts quite like axios , only better. It helps you fetch and add data to the backend (NOBOX) but with a better synthax.
 
 Since you have created the needed structure in the installation/configuration process above, here is how to add your first set of data to the nobox backend:
@@ -168,10 +170,10 @@ function UserComponent() {
 }
 
 ```
- 
- For further usage , here is a sample code showing more ways to use nobox
- 
- ```ts
+
+For further usage , here is a sample code showing more ways to use nobox
+
+```ts
 
 // Insert
 const insertedData = await UserModel.insertOne(data);
@@ -192,7 +194,3 @@ console.log({ updatedData})
 const allData = await UserModel.find({email: "test@gmail.com"})
 console.log(allData);
 ```
-
-
-
-

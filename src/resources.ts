@@ -4,55 +4,55 @@ import { CallResourcesByType, CallVerb, Config, SentHeaders } from "./types";
 
 export const callResourcesByType: CallResourcesByType = {
   _find: {
-    name: 'find',
+    name: "find",
     callVerb: CallVerb.Get,
   },
   _findOne: {
-    name: 'findOne',
-    slugAppend: '_single_',
+    name: "findOne",
+    slugAppend: "_single_",
     callVerb: CallVerb.Get,
   },
   _search: {
-    name: 'search',
-    slugAppend: 'search',
+    name: "search",
+    slugAppend: "search",
     callVerb: CallVerb.Get,
   },
   _insert: {
-    name: 'insert',
+    name: "insert",
     callVerb: CallVerb.Post,
   },
   _insertOne: {
-    name: 'insertOne',
-    slugAppend: '_single_',
+    name: "insertOne",
+    slugAppend: "_single_",
     callVerb: CallVerb.Post,
   },
   _updateOne: {
-    name: 'updateOne',
-    slugAppend: 'update',
+    name: "updateOne",
+    slugAppend: "update",
     callVerb: CallVerb.Post,
   },
   _updateOneById: {
-    name: 'updateOneById',
-    slugAppend: 'update-by-id',
+    name: "updateOneById",
+    slugAppend: "update-by-id",
     callVerb: CallVerb.Post,
   },
   _deleteOneById: {
-    name: 'deleteOneById',
+    name: "deleteOneById",
     callVerb: CallVerb.Delete,
   },
   _getTokenOwner: {
-    name: 'getTokenOwner',
-    slugAppend: 'get-token-owner',
+    name: "getTokenOwner",
+    slugAppend: "get-token-owner",
     callVerb: CallVerb.Get,
   },
   _setKeyValues: {
-    name: 'setKeyValues',
-    slugAppend: 'set-key-values',
+    name: "setKeyValues",
+    slugAppend: "set-key-values",
     callVerb: CallVerb.Post,
   },
   _getKeyValues: {
-    name: 'getKeyValues',
-    slugAppend: 'get-key-values',
+    name: "getKeyValues",
+    slugAppend: "get-key-values",
     callVerb: CallVerb.Get,
   },
 };
