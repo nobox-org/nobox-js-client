@@ -14,7 +14,7 @@ import {
   StructureItem,
 } from "./types";
 
-export type CompatibleStructureFieldType = "TEXT" | "NUMBER" | "BOOLEAN" | "ARRAY" | "OBJECT";
+export type CompatibleStructureFieldType = 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ARRAY' | 'OBJECT';
 
 export type CreateRecordSpacePayload<T> = {
   name: string;
@@ -37,11 +37,11 @@ export type CreateHeaders<T> = {
 }
 
 const extraCompatibleTypeFromConstructorType = (type: StructureFieldType): CompatibleStructureFieldType => {
-  if (type === String) return "TEXT";
-  if (type === Number) return "NUMBER";
-  if (type === Boolean) return "BOOLEAN";
-  if (type === Array) return "ARRAY";
-  if (type === Object) return "OBJECT";
+  if (type === String) return 'TEXT';
+  if (type === Number) return 'NUMBER';
+  if (type === Boolean) return 'BOOLEAN';
+  if (type === Array) return 'ARRAY';
+  if (type === Object) return 'OBJECT';
   throw new Error(`Type ${type} is not supported`);
 };
 
@@ -155,7 +155,7 @@ const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeade
 };
 
 export const prepareData = <T extends CObject>(
-  { spaceModel, params, body, slugAppend = "", options, token }: Omit<CallCommands<T>, "callVerb" | "config">,
+  { spaceModel, params, body, slugAppend = '', options, token }: Omit<CallCommands<T>, 'callVerb' | 'config'>,
   config: Config,
 ) => {
   const modelToCreate = reMapSpaceStructureForCreation(spaceModel, config);
@@ -164,8 +164,8 @@ export const prepareData = <T extends CObject>(
 
   const gettingTokenOwnerOnly = Boolean(token);
 
-  if (!["get-key-values", "get-token-owner"].includes(slugAppend) && !payload) {
-    const error = "Please Set body or params for this Call";
+  if (!['get-key-values', 'get-token-owner'].includes(slugAppend) && !payload) {
+    const error = `Please Set body or params for this Call`;
     Logger.error({ structure: modelToCreate.name }, error);
     throw error;
   }

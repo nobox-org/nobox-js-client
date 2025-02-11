@@ -46,10 +46,7 @@ export const call = async <T extends CObject>({
       return res.data;
     }
   } catch (error: any) {
-    // console.error(error, "createSchema:wrapCall");
-    // throw error;
-    Logger.log(error, "createSchema:wrapCall");
-
-    handleCallErrors(error, "createSchema:wrapCall")
+    Logger.log(error, 'createSchema:wrapCall');
+    handleCallErrors(error, 'createSchema:wrapCall');
   }
 };

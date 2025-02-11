@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { cLogger, Logger } from "../logger";
-import { getConnectionInstance } from "../resources";
-import { CallVerb, CObject, Config, ReturnObject, Space } from "../types";
-import { extractErrorMessage, reMapSpaceStructureForCreation } from "../utils";
+import { cLogger, Logger } from '../logger';
+import { getConnectionInstance } from '../resources';
+import { CallVerb, CObject, Config, ReturnObject, Space } from '../types';
+import { extractErrorMessage, reMapSpaceStructureForCreation } from '../utils';
 
 export type SendPushNotificationArgs<T extends CObject> = {
   findBy?: Partial<ReturnObject<T>>;
@@ -43,14 +42,14 @@ export const _sendPushNotification = async <T extends CObject>(
 
   try {
     const res = await connect[CallVerb.Post](
-      "function/send-push-notification",
+      'function/send-push-notification',
       {
         findBy,
         body,
       },
       {
         headers: {
-          "function-resources": JSON.stringify({
+          'function-resources': JSON.stringify({
             mustExistSpaceStructures: [spaceStructure],
             receiverTokenField: tokenField,
           }),
@@ -59,9 +58,9 @@ export const _sendPushNotification = async <T extends CObject>(
     );
     return res.data;
   } catch (error: any) {
-    Logger.log(error, "functions::sendPushNotification");
+    Logger.log(error, 'functions::sendPushNotification');
     const extractedErrorMessage = extractErrorMessage(error);
-    cLogger.log(extractedErrorMessage, "functions::sendPushNotification");
+    cLogger.log(extractedErrorMessage, 'functions::sendPushNotification');
   }
 
   return { success: false };

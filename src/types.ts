@@ -113,7 +113,7 @@ export type CallCommandsForGetKeyValues<T extends CObject> = Omit<CallCommands<T
  * This is type for rowed calls
  */
 
-export type CallCommandsWithParams<T extends CObject, P> = {
+export type CallCommandsWithParams<T extends CObject, P> = Omit<CallCommands<T>, "params" | "callVerb"> & {
   params: P;
   options: Options<T>;
   config: Config;
