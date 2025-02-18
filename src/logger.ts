@@ -1,4 +1,6 @@
-const showLogs = false;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const showLogs = process.env.DEBUG === "true" || false;
 const showCompulsoryLogs = true;
 
 export const Logger = {

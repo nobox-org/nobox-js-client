@@ -1,5 +1,5 @@
-import { _setKeyValues, _getKeyValues } from '../calls/key-group-calls';
-import { CObject, Config, ReturnObject, Space } from '../types';
+import { _setKeyValues, _getKeyValues } from "../calls/key-group-calls";
+import { CObject, Config, ReturnObject, Space } from "../types";
 
 export const getKeyGroupSchemaCreator =
   (config: Config) =>
