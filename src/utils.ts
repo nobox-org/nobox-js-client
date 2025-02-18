@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Logger } from "./logger";
-import { getDefaultHeaders } from "./resources";
+import { Logger } from './logger';
+import { getDefaultHeaders } from './resources';
 import {
   CallCommands,
   CObject,
@@ -12,9 +12,9 @@ import {
   SpaceWebhooks,
   StructureFieldType,
   StructureItem,
-} from "./types";
+} from './types';
 
-export type CompatibleStructureFieldType = "TEXT" | "NUMBER" | "BOOLEAN" | "ARRAY" | "OBJECT";
+export type CompatibleStructureFieldType = 'TEXT' | 'NUMBER' | 'BOOLEAN' | 'ARRAY' | 'OBJECT';
 
 export type CreateRecordSpacePayload<T> = {
   name: string;
@@ -27,21 +27,21 @@ export type CreateRecordSpacePayload<T> = {
   webhooks?: SpaceWebhooks;
   clear?: boolean;
   initialData?: T[];
-}
+};
 
 export type CreateHeaders<T> = {
   modelToCreate: CreateRecordSpacePayload<T>;
   options?: any;
   config: Config;
   token?: string;
-}
+};
 
 const extraCompatibleTypeFromConstructorType = (type: StructureFieldType): CompatibleStructureFieldType => {
-  if (type === String) return "TEXT";
-  if (type === Number) return "NUMBER";
-  if (type === Boolean) return "BOOLEAN";
-  if (type === Array) return "ARRAY";
-  if (type === Object) return "OBJECT";
+  if (type === String) return 'TEXT';
+  if (type === Number) return 'NUMBER';
+  if (type === Boolean) return 'BOOLEAN';
+  if (type === Array) return 'ARRAY';
+  if (type === Object) return 'OBJECT';
   throw new Error(`Type ${type} is not supported`);
 };
 
@@ -51,12 +51,12 @@ const extractStructureParams = (
   const paramDefaults = {
     required: false,
     unique: false,
-    description: "",
-    comment: "",
+    description: '',
+    comment: '',
     hashed: false,
   };
 
-  const isObject = (v: any): v is StructureItem => typeof value === "object" && !Array.isArray(value) && value !== null;
+  const isObject = (v: any): v is StructureItem => typeof value === 'object' && !Array.isArray(value) && value !== null;
 
   const valueIsAndObject = isObject(value);
 
@@ -101,7 +101,7 @@ export const reMapSpaceStructureForCreation = <T>(
 export const camelToTrain = (str: string) => str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 
 export const convertPayloadKeysToTrain = <T extends object>(payload: T) => {
-  Logger.log({ payload }, "convertParamsKeysToTrain");
+  Logger.log({ payload }, 'convertParamsKeysToTrain');
 
   if (payload && Array.isArray(payload)) {
     return (payload as T[]).map(convertPayload);
@@ -123,13 +123,13 @@ export const handleSchemaCallErrors = (error: any, functionTag: string, publicEr
   Logger.log(error, functionTag);
   // const _error = { ...error, tag: publicErrorTag};
   const _error = new CallError(
-    "Error in Call",
+    'Error in Call',
     error.statusCode,
     error.message,
     error.path,
     error.timestamp,
-    publicErrorTag
-  )
+    publicErrorTag,
+  );
   // cLogger.debug(_error, publicErrorTag);
 
   throw _error;
@@ -140,7 +140,7 @@ const createPayload = ({ params, body }: any) =>
   ({
     ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
     ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
-  } as Record<"params" | "body", any>);
+  } as Record<'params' | 'body', any>);
 
 const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
   const headers: SentHeaders = {
@@ -148,14 +148,14 @@ const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeade
     structure: JSON.stringify(modelToCreate),
   };
 
-  if (options) headers["options"] = JSON.stringify(options) as any;
-  if (token) headers["token"] = token;
+  if (options) headers['options'] = JSON.stringify(options) as any;
+  if (token) headers['token'] = token;
 
   return headers;
 };
 
 export const prepareData = <T extends CObject>(
-  { spaceModel, params, body, slugAppend = "", options, token }: Omit<CallCommands<T>, "callVerb" | "config">,
+  { spaceModel, params, body, slugAppend = '', options, token }: Omit<CallCommands<T>, 'callVerb' | 'config'>,
   config: Config,
 ) => {
   const modelToCreate = reMapSpaceStructureForCreation(spaceModel, config);
@@ -164,8 +164,8 @@ export const prepareData = <T extends CObject>(
 
   const gettingTokenOwnerOnly = Boolean(token);
 
-  if (!["get-key-values", "get-token-owner"].includes(slugAppend) && !payload) {
-    const error = "Please Set body or params for this Call";
+  if (!['get-key-values', 'get-token-owner'].includes(slugAppend) && !payload) {
+    const error = 'Please Set body or params for this Call';
     Logger.error({ structure: modelToCreate.name }, error);
     throw error;
   }
@@ -178,10 +178,10 @@ export const prepareData = <T extends CObject>(
   const fullPayload = {
     ...payloadObject,
     headers,
-    url: `${modelToCreate.slug}${slugAppend ? "/" + slugAppend : ""}`,
+    url: `${modelToCreate.slug}${slugAppend ? '/' + slugAppend : ''}`,
   };
 
-  Logger.sLog({ fullPayload }, "utils:prepareData");
+  Logger.sLog({ fullPayload }, 'utils:prepareData');
 
   return fullPayload;
 };
@@ -197,13 +197,12 @@ export const extractErrorMessage = (error: any) => {
   const errorMatchTwo = error?.response?.data;
   const mappedError = errorMatchOne || errorMatchTwo;
   if (!mappedError) {
-    console.log(error.message, "extractErrorMessage");
-    return "Connection Error";
+    console.log(error.message, 'extractErrorMessage');
+    return 'Connection Error';
   }
 
   return mappedError;
 };
-
 
 export class CallError extends Error {
   statusCode: number;
@@ -212,9 +211,16 @@ export class CallError extends Error {
   timestamp?: string;
   tag?: string;
 
-  constructor(message ="Error Occurred", statusCode: number, details?: string, path?: string, timestamp?: string, tag?: string) {
+  constructor(
+    message = 'Error Occurred',
+    statusCode: number,
+    details?: string,
+    path?: string,
+    timestamp?: string,
+    tag?: string,
+  ) {
     super(message);
-    this.name = "CallError";
+    this.name = 'CallError';
     this.statusCode = statusCode;
     this.details = details;
     this.path = path;
