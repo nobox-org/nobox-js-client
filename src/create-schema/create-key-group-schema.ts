@@ -1,10 +1,10 @@
-import { _setKeyValues, _getKeyValues } from '../calls/key-group-calls';
+import { _setKeyValues, _getKeyValues, _clearKeyValues } from '../calls/key-group-calls';
 import { CObject, Config, ReturnObject, Space } from '../types';
 
 export const getKeyGroupSchemaCreator =
   (config: Config) =>
-  <T extends CObject>(spaceModel: Space<T>) =>
-    createKeyGroupSchema(spaceModel, config);
+    <T extends CObject>(spaceModel: Space<T>) =>
+      createKeyGroupSchema(spaceModel, config);
 
 export type KeyGroupSchemaModel<T extends CObject> = ReturnType<typeof createKeyGroupSchema<T>>;
 
@@ -14,5 +14,8 @@ const createKeyGroupSchema = <T extends CObject>(spaceModel: Space<T>, config: C
   },
   async getKeys(): Promise<Array<ReturnObject<T>>> {
     return _getKeyValues({ spaceModel, config });
+  },
+  async clear(): Promise<void> {
+    return _clearKeyValues({ spaceModel, config });
   },
 });

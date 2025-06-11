@@ -28,6 +28,14 @@ export const _findOne = async <T extends CObject, P extends Partial<T>>(args: Ca
   }
 };
 
+export const _clear = async <T extends CObject, P extends Partial<T>>(args: { spaceModel: Space<T>, config: Config }) => {
+  try {
+    return await call({ ...args, ...callResourcesByType['_clear'] });
+  } catch (error: any) {
+    return handleSchemaCallErrors(error, 'create-schema:_clear', 'nobox:_clear');
+  }
+};
+
 export const _insert = async <T extends CObject>(args: {
   spaceModel: Space<T>;
   body: T[];

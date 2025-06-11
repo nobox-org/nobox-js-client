@@ -55,6 +55,11 @@ export const callResourcesByType: CallResourcesByType = {
     slugAppend: 'get-key-values',
     callVerb: CallVerb.Get,
   },
+  _clear: {
+    name: 'clear',
+    slugAppend: 'clear-records',
+    callVerb: CallVerb.Delete,
+  },
 };
 
 export const getConnectionInstance = (config: Config) => {

@@ -26,6 +26,7 @@ export const call = async <T extends CObject>({
       params: _params = null,
     } = prepareData({ spaceModel, params, body, slugAppend, options, token }, config);
 
+
     let res: AxiosResponse;
 
     if (callVerb === CallVerb.Get) {
@@ -39,10 +40,17 @@ export const call = async <T extends CObject>({
     }
 
     if (callVerb === CallVerb.Delete) {
+
+      if (name === 'clear') {
+        res = await connect[callVerb](url, { headers });
+        return res.data;
+      }
+
       res = await connect[callVerb](url, {
         params: _params,
         headers,
       });
+
       return res.data;
     }
   } catch (error: any) {

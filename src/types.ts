@@ -68,6 +68,7 @@ export enum CallType {
   Insert = '_insert',
   InsertOne = '_insertOne',
   UpdateOne = '_updateOne',
+  Clear = '_clear',
   UpdateOneById = '_updateOneById',
   DeleteOneById = '_deleteOneById',
   GetTokenOwner = '_getTokenOwner',
@@ -167,8 +168,9 @@ export type Options<T extends CObject> = {
   populate?: {
     fields: {
       from: string;
-      to: string;
-      new: string;
+      foreignKey: string;
+      localKey: string;
+      newField: string;
     };
     space: string;
   }[];

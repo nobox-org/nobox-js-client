@@ -8,13 +8,14 @@ import {
   _getTokenOwner,
   _deleteOneById,
   _search,
+  _clear,
 } from '../calls/rowed-calls';
 import { CObject, Config, Options, ReturnObject, Space } from '../types';
 
 export const getRowedSchemaCreator =
   (config: Config) =>
-  <T extends CObject>(spaceModel: Space<T>) =>
-    createRowedSchema(spaceModel, config);
+    <T extends CObject>(spaceModel: Space<T>) =>
+      createRowedSchema(spaceModel, config);
 
 export type RowedSchemaModel<T extends CObject> = ReturnType<typeof createRowedSchema<T>>;
 
@@ -27,6 +28,7 @@ const createRowedSchema = <T extends CObject>(spaceModel: Space<T>, config: Conf
   ): Promise<Array<ReturnObject<T>>> {
     return _find({ spaceModel, params, options, config });
   },
+
   async findOne(
     params: Partial<T & { id: string }>,
     options: Options<T> = {
@@ -77,4 +79,7 @@ const createRowedSchema = <T extends CObject>(spaceModel: Space<T>, config: Conf
   async getTokenOwner(token: string): Promise<ReturnObject<T>> {
     return _getTokenOwner({ spaceModel, token, config });
   },
+  async clear(): Promise<ReturnObject<T>> {
+    return _clear({ spaceModel, config });
+  }
 });

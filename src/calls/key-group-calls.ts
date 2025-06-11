@@ -38,3 +38,18 @@ export const _getKeyValues = async <T extends CObject>(args: CallCommandsForGetK
     return handleSchemaCallErrors(error, 'create-key-group-schema:_getKeyValues', 'nobox_getKeyValues');
   }
 };
+
+
+/**
+ * This clears all the keys in the key group
+ *
+ * @param args
+ * @returns
+ */
+export const _clearKeyValues = async <T extends CObject>(args: CallCommandsForGetKeyValues<T>) => {
+  try {
+    return await call({ ...args, ...callResourcesByType['_clear'] });
+  } catch (error: any) {
+    return handleSchemaCallErrors(error, 'create-key-group-schema:_clearKeyValues', 'nobox_clearKeyValues');
+  }
+}

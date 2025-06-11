@@ -137,10 +137,10 @@ export const handleSchemaCallErrors = (error: any, functionTag: string, publicEr
 };
 
 const createPayload = ({ params, body }: any) =>
-  ({
-    ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
-    ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
-  } as Record<'params' | 'body', any>);
+({
+  ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
+  ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
+} as Record<'params' | 'body', any>);
 
 const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
   const headers: SentHeaders = {
@@ -164,7 +164,7 @@ export const prepareData = <T extends CObject>(
 
   const gettingTokenOwnerOnly = Boolean(token);
 
-  if (!['get-key-values', 'get-token-owner'].includes(slugAppend) && !payload) {
+  if (!['get-key-values', 'get-token-owner', 'clear-records'].includes(slugAppend) && !payload) {
     const error = 'Please Set body or params for this Call';
     Logger.error({ structure: modelToCreate.name }, error);
     throw error;
