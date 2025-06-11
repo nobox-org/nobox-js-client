@@ -39,7 +39,6 @@ export const _getKeyValues = async <T extends CObject>(args: CallCommandsForGetK
   }
 };
 
-
 /**
  * This clears all the keys in the key group
  *
@@ -52,4 +51,4 @@ export const _clearKeyValues = async <T extends CObject>(args: CallCommandsForGe
   } catch (error: any) {
     return handleSchemaCallErrors(error, 'create-key-group-schema:_clearKeyValues', 'nobox_clearKeyValues');
   }
-}
+};

@@ -28,7 +28,10 @@ export const _findOne = async <T extends CObject, P extends Partial<T>>(args: Ca
   }
 };
 
-export const _clear = async <T extends CObject, P extends Partial<T>>(args: { spaceModel: Space<T>, config: Config }) => {
+export const _clear = async <T extends CObject, P extends Partial<T>>(args: {
+  spaceModel: Space<T>;
+  config: Config;
+}) => {
   try {
     return await call({ ...args, ...callResourcesByType['_clear'] });
   } catch (error: any) {

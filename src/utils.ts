@@ -137,10 +137,10 @@ export const handleSchemaCallErrors = (error: any, functionTag: string, publicEr
 };
 
 const createPayload = ({ params, body }: any) =>
-({
-  ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
-  ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
-} as Record<'params' | 'body', any>);
+  ({
+    ...(params ? { params: convertPayloadKeysToTrain(params) } : {}),
+    ...(body ? { body: convertPayloadKeysToTrain(body) } : {}),
+  } as Record<'params' | 'body', any>);
 
 const createHeaders = <T>({ modelToCreate, options, config, token }: CreateHeaders<T>): any => {
   const headers: SentHeaders = {

@@ -14,8 +14,8 @@ import { CObject, Config, Options, ReturnObject, Space } from '../types';
 
 export const getRowedSchemaCreator =
   (config: Config) =>
-    <T extends CObject>(spaceModel: Space<T>) =>
-      createRowedSchema(spaceModel, config);
+  <T extends CObject>(spaceModel: Space<T>) =>
+    createRowedSchema(spaceModel, config);
 
 export type RowedSchemaModel<T extends CObject> = ReturnType<typeof createRowedSchema<T>>;
 
@@ -81,5 +81,5 @@ const createRowedSchema = <T extends CObject>(spaceModel: Space<T>, config: Conf
   },
   async clear(): Promise<ReturnObject<T>> {
     return _clear({ spaceModel, config });
-  }
+  },
 });

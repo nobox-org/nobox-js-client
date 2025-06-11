@@ -3,8 +3,8 @@ import { CObject, Config, ReturnObject, Space } from '../types';
 
 export const getKeyGroupSchemaCreator =
   (config: Config) =>
-    <T extends CObject>(spaceModel: Space<T>) =>
-      createKeyGroupSchema(spaceModel, config);
+  <T extends CObject>(spaceModel: Space<T>) =>
+    createKeyGroupSchema(spaceModel, config);
 
 export type KeyGroupSchemaModel<T extends CObject> = ReturnType<typeof createKeyGroupSchema<T>>;
 
